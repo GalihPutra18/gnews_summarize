@@ -1,0 +1,6 @@
+Flask
+beautifulsoup4
+nltk
+requests
+scikit-learn
+googletrans==4.0.0-rc1

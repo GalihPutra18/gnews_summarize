@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"> <!-- Tambahkan font -->
+    <title>News Summarization App</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif; /* Menggunakan font Roboto */
+            background: url('https://source.unsplash.com/random/1920x1080/?news') no-repeat center center fixed; /* Menggunakan gambar acak dari Unsplash */
+            background-size: cover; /* Menyesuaikan ukuran gambar */
+        }
+
+        .dark {
+            background-color: #1a1a1a; /* Warna latar belakang gelap */
+            color: #f0f0f0; /* Warna teks terang */
+        }
+
+        .dark .bg-white {
+            background-color: #2d2d2d; /* Warna latar belakang bodi saat gelap */
+            border-color: #444; /* Warna border saat gelap */
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen">
+    <div class="bg-white shadow-lg rounded-lg p-10 w-full max-w-2xl bg-opacity-90"> <!-- Menambahkan transparansi -->
+        <h1 class="text-3xl font-semibold text-center mb-6 text-blue-600">News Summarization & Hashtag Generator</h1>
+        
+        <button id="theme-toggle" class="absolute top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-md focus:outline-none transition duration-200">Toggle Dark/Light Theme</button>
+
+        <form method="POST">
+            <label for="url" class="block text-sm font-medium">Enter Article URL:</label>
+            <textarea id="url" name="url" required class="mt-1 block w-full h-24 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-300 bg-white dark:bg-gray-800 dark:text-gray-200" placeholder="Paste the article URL here..."></textarea>
+
+            <label for="language" class="block mt-4 text-sm font-medium">Select Language for Translation:</label>
+            <select id="language" name="language" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-300 bg-white dark:bg-gray-800 dark:text-gray-200">
+                <option value="en">English</option>
+                <option value="id">Indonesian</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+            </select>
+
+            <label for="num_clusters" class="block mt-4 text-sm font-medium">Number of Clusters:</label>
+            <input type="number" id="num_clusters" name="num_clusters" min="1" max="5" value="2" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-300 bg-white dark:bg-gray-800 dark:text-gray-200">
+
+            <button type="submit" class="mt-6 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 transition duration-200">Summarize</button>
+        </form>
+
+        {% if title %}
+            <h2 class="mt-6 text-lg font-semibold">Article Title: {{ title }}</h2>
+            <h3 class="mt-4 font-semibold">Key Points:</h3>
+            <ul class="list-disc list-inside pl-5">
+                {% for point in summary %}
+                    <li class="text-sm">{{ point }}</li> <!-- Mengurangi ukuran font key points -->
+                {% endfor %}
+            </ul>
+            
+            <h3 class="mt-4 font-semibold">Short Summary:</h3>
+            <p class="border border-gray-300 rounded-md p-2 text-sm">{{ paragraph_summary }}</p> <!-- Mengurangi ukuran font short summary -->
+
+            <h3 class="mt-4 font-semibold">Long Summary:</h3>
+            <p class="border border-gray-300 rounded-md p-2 text-sm">{{ long_summary }}</p> <!-- Mengurangi ukuran font long summary -->
+
+            <h3 class="mt-4 font-semibold">Generated Hashtags:</h3>
+            <p class="border border-gray-300 rounded-md p-2 text-sm">{{ hashtags | join(', ') }}</p> <!-- Mengurangi ukuran font hashtags -->
+        {% endif %}
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class="mt-4 text-red-500">
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        <footer class="text-center mt-6">
+            <p class="text-gray-600 text-sm">© 2024 News Summarization App. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Script untuk mengubah tema
+        const themeToggleButton = document.getElementById('theme-toggle');
+        const bodyElement = document.body;
+
+        themeToggleButton.addEventListener('click', () => {
+            bodyElement.classList.toggle('dark');
+        });
+    </script>
+</body>
+
+</html>
